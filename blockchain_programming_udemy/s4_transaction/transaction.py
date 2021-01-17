@@ -70,6 +70,24 @@ class Tx:
 		data.append(self.outputs)
 		data.append(self.reqd)
 		return data
+	
+	def __repr__(self):
+		representation = "INPUTS:\n"
+		for address, amount in self.inputs:
+			representation += str(amount) + " from " + str(address) + "\n"
+		representation += "OUTPUTS:\n"
+		for address, amount in self.outputs:
+			representation += str(amount) + " to " + str(address) + "\n"
+		representation += "REQD:\n"
+		for address in self.reqd:
+			representation += str(address) + "\n"
+
+		representation += "SIGS:\n"
+		for s in self.signatures:
+			representation += str(s) + "\n"
+
+		representation += "END:\n"
+		return representation
 
 if __name__ == "__main__":
 

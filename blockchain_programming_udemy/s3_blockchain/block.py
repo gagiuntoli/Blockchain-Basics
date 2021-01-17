@@ -2,7 +2,6 @@
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 
-
 class someClass:
 	string = None
 	num = 328965
@@ -15,16 +14,23 @@ class CBlock:
 	data = None
 	previous_hash = None
 	previous_block = None
+
 	def __init__(self, data, previous_block):
 		self.data = data
 		self.previous_block = previous_block
 		if previous_block != None:
 			self.previous_hash = previous_block.computeHash()
+
 	def computeHash(self):
 		digest = hashes.Hash(hashes.SHA256(), backend=default_backend())
 		digest.update(bytes(str(self.data), 'utf8'))
 		digest.update(bytes(str(self.previous_hash), 'utf8'))
 		return digest.finalize()
+
+	def is_valid(self):
+		if self.previous_block == None:
+			return True
+		return self.previous_block.computeHash() == self.previous_hash
 
 
 if __name__ == '__main__':
@@ -40,19 +46,19 @@ if __name__ == '__main__':
 	#      \> B2
 
 	for b in [B1, B2, B3, B4, B5]:
-		if b.previous_block.computeHash() == b.previous_hash:
+		if b.is_valid():
 			print ("Success! Hash is good")
 		else:
 			print ("Error! Hash is not good")
 
 	B3.data = 12345
-	if B4.previous_block.computeHash() == B4.previous_hash:
+	if B4.is_valid():
 		print ("Error! Couldn't detect tampering")
 	else:
 		print ("Success! Tampering detected")
 
 	B4.data.num = 666666
-	if B5.previous_block.computeHash() == B5.previous_hash:
+	if B5.is_valid():
 		print ("Error! Couldn't detect tampering")
 	else:
 		print ("Success! Tampering detected")

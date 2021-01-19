@@ -1,10 +1,5 @@
-import sys
+
 import pickle
-
-sys.path.append("../s2_signature/")
-sys.path.append("../s3_blockchain/")
-sys.path.append("../s4_transaction/")
-
 import signature
 from transaction import Tx
 from block import CBlock

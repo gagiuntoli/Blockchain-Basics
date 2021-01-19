@@ -1,5 +1,4 @@
-import sys
-sys.path.append("../s2_signature/")
+
 import signature
 
 class Tx:

@@ -58,8 +58,8 @@ class Tx:
 				return False
 			total_output += amount
 
-		if total_output > total_input:
-			return False
+		#if total_output > total_input:
+		#	return False
 
 		return True
 

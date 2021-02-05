@@ -1,40 +1,18 @@
-
 import socket
 import pickle
-import select
 
-TCP_PORT = 5005
 BUFFER_SIZE = 1024
 
-def newServerConnection(ip_address, port=TCP_PORT):
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.bind((ip_address, port))
-	s.listen()
-	return s
-
 def recvObj(socket):
-	#inputs, outputs, errs = select.select([socket], [], [socket], 6)
-	#if socket in inputs:
-	new_sock, addr = socket.accept()
-	all_data = b''
+	new_socket, addr = socket.accept()
+	data = b''
 	while True:
-		data = new_sock.recv(BUFFER_SIZE)
-		if not data: break
-		all_data += data
-	return pickle.loads(all_data)
-	#else:
-	#	return None
+		d = new_socket.recv(BUFFER_SIZE)
+		if not d:
+			 break
+		data += d
+	return pickle.loads(data)
 
-def sendObj(ip_address, inObj, port=TCP_PORT):
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect((ip_address, port))
-	data = pickle.dumps(inObj)
-	s.send(data)
-	s.close()
-	return False
-
-if __name__ == "__main__":
-	server = newServerConnection('localhost')
-	O = recvObj(server)
-	print("Success!")
-	server.close()
+def sendObj(obj, socket):
+	data = pickle.dumps(obj)
+	socket.send(data)
